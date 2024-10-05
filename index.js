@@ -38,9 +38,23 @@ app.get('/content', async (req, res, next) => {
     // try {
 		const { browser, context, page } = await createPlaywrightPage();
 
+		const url = req.query.url || 'https://snelste.nl';
 
-        await page.goto('https://essent.nl');
+        await page.goto(url);
+        // await page.goto('https://essent.nl');
         // await page.goto('https://nederlandisoleert.nl');
+
+
+
+		    // Block images, stylesheets, and fonts
+			await page.route('**/*', (route) => {
+				const blockedResources = ['image', 'stylesheet', 'font'];
+				if (blockedResources.includes(route.request().resourceType())) {
+				  route.abort();
+				} else {
+				  route.continue();
+				}
+			  });
         
 
 

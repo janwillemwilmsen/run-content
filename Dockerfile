@@ -21,13 +21,19 @@ RUN apt-get update && apt-get install -y \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Create and set the application directory
-WORKDIR /app
+# WORKDIR /app
+WORKDIR /usr/src/app
+
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
+ENV PLAYWRIGHT_BROWSERS_PATH=0
+
+RUN npx playwright install chromium
+
 
 # Copy the rest of the application code
 COPY . .
